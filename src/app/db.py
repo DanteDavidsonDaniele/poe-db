@@ -22,12 +22,12 @@ def get_conn():
         conn.close()
 
 
-def init_db() -> None:
+def init_db(dbName:str) -> None:
     """Create tables if they don't exist. Extend this as your schema grows."""
     with get_conn() as conn:
         conn.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS example (
+            f"""
+            CREATE TABLE IF NOT EXISTS {dbName} (
                 id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
                 created_at TEXT NOT NULL DEFAULT (datetime('now'))
