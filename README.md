@@ -5,19 +5,14 @@ env-based config, pytest, ruff, Makefile.
 
 ## Structure
 
-```
-.
-├── pyproject.toml      # deps, tooling config (one file for everything)
-├── Makefile            # make setup / run / test / lint / fmt
-├── .env.example        # copy to .env for local secrets/config
-├── src/app/
-│   ├── __init__.py
-│   ├── config.py       # env-driven settings
-│   ├── db.py           # SQLite connection helper + schema init
-│   └── main.py         # entrypoint: python -m app.main
-└── tests/
-    └── test_smoke.py
-```
+model - defines database schema
+repository - defines methods relating to database interactions
+router - defines API endpoints
+service - defines methods relating to business logic
+util - defines unviversal helper methods 
+
+
+
 
 ## Quick start
 

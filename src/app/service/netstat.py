@@ -1,5 +1,7 @@
 import subprocess
-import re; 
+import re
+
+from app.repository.netstat import init_netstat, insert_netstat_entries; 
 
 def get_netstat():
     try:
@@ -32,3 +34,8 @@ def format_netstat(rawOutput:str):
                 }
                 activeSockets.append(activeSocket)
         return activeSockets
+
+def handleNetstat():
+    netstatEntries = get_netstat()
+    init_netstat()
+    insert_netstat_entries(netstatEntries)

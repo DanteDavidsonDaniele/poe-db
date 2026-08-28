@@ -1,14 +1,6 @@
-from typing import TypedDict
-from app.db import get_conn
+from app.model.netstat import NetstatEntry
+from app.repository.db import get_conn
 
-class NetstatEntry(TypedDict):           
-    protocol: str
-    recv_q: int
-    send_q:int
-    local_address: str
-    foreign_address: str
-    state: str
-    pid: str
 
 def init_netstat() -> None:
     """Create tables if they don't exist. Extend this as your schema grows."""
