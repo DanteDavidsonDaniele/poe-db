@@ -5,9 +5,8 @@ import logging
 
 from app.config import LOG_LEVEL
 from app.model.poe import Item
-from app.repository.items import init_items_db, insert_item
-from app.router.netstat import netstat_route
-from app.service.poe.economy.scout import getPoeScoutOverview, handleItemData
+from app.repository.items import init_items_db, init_price_db
+from app.service.poe.economy.scout import handleItemData
 
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -18,6 +17,7 @@ log = logging.getLogger(__name__)
 
 def run() -> None:
     init_items_db()
+    init_price_db()
     handleItemData()
     # asyncio.run(getPoeScoutOverview())
     # init_items_db()

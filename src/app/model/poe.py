@@ -1,11 +1,18 @@
 from typing import TypedDict
 
+
+class PriceLogEntry(TypedDict):
+    Price: int
+    Time: str
+    Quantity: int
+
 class Item(TypedDict):
     item_id: int
     name: str
     description: str
     category: str
     icon_url: str
+    price_data: list[PriceLogEntry]
 
 class CurrencyItemMetadata(TypedDict):
     name: str
@@ -15,12 +22,6 @@ class CurrencyItemMetadata(TypedDict):
     max_stack_size: int
     description: str
     effect: list[str]
-
-class PriceLogEntry(TypedDict):
-    Price: int
-    Time: str
-    Quantity: int
-
 
 class ScoutCurrencyEntry(TypedDict):
     CurrencyItemId: int
