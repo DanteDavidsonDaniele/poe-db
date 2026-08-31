@@ -1,9 +1,11 @@
 """Entrypoint. Run with: python -m app.main"""
 
+import asyncio
 import logging
 
 from app.config import LOG_LEVEL
 from app.router.netstat import netstat_route
+from app.service.poe.economy.scout import getPoeScoutOverview
 
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -13,7 +15,8 @@ log = logging.getLogger(__name__)
 
 
 def run() -> None:
-    netstat_route()
+    asyncio.run(getPoeScoutOverview())
+    # netstat_route()
 
 if __name__ == "__main__":
     run()
