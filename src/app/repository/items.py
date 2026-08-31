@@ -2,6 +2,7 @@ from app.model.poe import Item
 from app.repository.db import get_conn
 
 ITEMS_DB_NAME: str = "items"
+PRICE_DB_NAME: str = "pricing"
 
 def init_items_db() -> None:
     """Creates the items reference table if it does not already exist"""
@@ -20,7 +21,37 @@ def init_items_db() -> None:
             """
         )
 
-def insert_item(item:Item):
+def init_price_db() -> None:
+    """Creates the item price history table if it does not already exist"""
     with get_conn() as conn:
-       conn.execute(f"INSERT INTO {ITEMS_DB_NAME} (item_id, category, name, description, icon_url)  VALUES ('{item.get("item_id")}', '{item.get("category")}', '{item.get("name")}', '{item.get("description")}', '{item.get("icon_url")}');")
+        conn.executescript(
+            f"""
+            CREATE TABLE IF NOT EXISTS {PRICE_DB_NAME} (
+               id INTEGER PRIMARY KEY,
+               item_id INTEGER REFERENCES {ITEMS_DB_NAME}(item_id),
+               trade_currency TEXT NOT NULL,
+               price INTEGER NOT NULL,
+               trade_volume INTEGER NOT NULL,
+               trade_timestamp TEXT NOT NULL,
+               interval INTEGER NOT NULL
+            );
+            """
+        )
+
+def insert_item(item:Item):
+    print()
+    print(item)
+    print()
+    with get_conn() as conn:
+       conn.execute(
+        f"INSERT OR IGNORE INTO {ITEMS_DB_NAME} (item_id, category, name, description, icon_url) "
+        "VALUES (?, ?, ?, ?, ?);",
+        (
+            item.get("item_id"),
+            item.get("category"),
+            item.get("name"),
+            item.get("description"),
+            item.get("icon_url"),
+        ),
+        )
        conn.commit()
