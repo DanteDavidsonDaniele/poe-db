@@ -22,36 +22,38 @@ HOST = "0.0.0.0"
 PORT = 8000
 
 
-def run() -> None:
-    init_items_db()
-    init_price_db()
-    handleItemOverview()
-    handleItemData()
+# def run() -> None:
+#     handleItemOverview()
+#     handleItemData()
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Runs once before the server starts accepting requests.
-    log.info("Initialising databases and scouting item data...")
-    # run() calls asyncio.run() internally, which can't be used inside
-    # uvicorn's event loop -- so run it in a worker thread instead.
-    await asyncio.to_thread(run)
-    log.info("Startup complete, listening on http://%s:%s", HOST, PORT)
-    yield
-    # Shutdown logic (if any) goes here.
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # Runs once before the server starts accepting requests.
+#     log.info("Initialising databases and scouting item data...")
+#     # run() calls asyncio.run() internally, which can't be used inside
+#     # uvicorn's event loop -- so run it in a worker thread instead.
+#     await asyncio.to_thread(run)
+#     log.info("Startup complete, listening on http://%s:%s", HOST, PORT)
+#     yield
+#     # Shutdown logic (if any) goes here.
 
 
-app = FastAPI(lifespan=lifespan)
+#app = FastAPI(lifespan=lifespan)
 
+app = FastAPI()
 
 @app.get("/")
 def read_root():
+    init_items_db()
+    init_price_db()
     return {"Hello": "World"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/items")
+def read_item():
+    handleItemOverview()
+    return {"response":"Items added"}
 
 
 if __name__ == "__main__":
