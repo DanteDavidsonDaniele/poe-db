@@ -24,9 +24,6 @@ def init_items_db() -> None:
 
 
 def insert_item(item:Item):
-    print()
-    print(item)
-    print()
     with get_conn() as conn:
        conn.execute(
         f"INSERT OR IGNORE INTO {ITEMS_DB_NAME} (item_id, category, name, description, icon_url) "
@@ -60,9 +57,6 @@ def init_price_db() -> None:
         )
 
 def insert_price_log(item_id:str, trade_currency:str,interval:int, price_data:PriceLogEntry):
-    print()
-    print(price_data)
-    print()
     with get_conn() as conn:
        conn.execute(
         f"INSERT INTO {PRICE_DB_NAME} (item_id, trade_currency, price, trade_volume, trade_timestamp, interval) "
