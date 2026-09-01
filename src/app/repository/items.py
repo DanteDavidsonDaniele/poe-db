@@ -38,6 +38,15 @@ def insert_item(item:Item):
         )
        conn.commit()
 
+def read_items() -> list[str]:
+    with get_conn() as conn:
+       cursor = conn.cursor()
+       cursor.execute("SELECT * FROM items")
+       rows = cursor.fetchall()
+       for row in rows:
+          print(row)
+       return rows
+    
 def init_price_db() -> None:
     """Creates the item price history table if it does not already exist"""
     with get_conn() as conn:

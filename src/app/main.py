@@ -11,6 +11,7 @@ from app.config import LOG_LEVEL
 from app.model.poe import Item
 from app.repository.items import init_items_db, init_price_db
 from app.service.poe.economy.scout import handleItemData, handleItemOverview
+from app.service.poe.items.items import handle_item_overview
 
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -52,8 +53,9 @@ def read_root():
 
 @app.get("/items")
 def read_item():
-    handleItemOverview()
-    return {"response":"Items added"}
+    #handleItemOverview()
+    items = handle_item_overview()
+    return {"response":items}
 
 
 if __name__ == "__main__":
