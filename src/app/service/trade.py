@@ -12,6 +12,7 @@ class TradeService():
 
   async def get_item_price_data(self, id):
     endpoint = "/".join([BASE_URL,REALM,"Leagues",LEAGUE,"Items",id, self.query_string])
+    print(endpoint,id)
     try:
         async with aiohttp.ClientSession() as session:
            async with session.get(endpoint) as response:

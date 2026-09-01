@@ -7,30 +7,39 @@ class TradeRepository():
         with get_conn() as conn:
             conn.executescript(
                 f"""
-                CREATE TABLE IF NOT EXISTS {ITEMS_DB_NAME} (
-                id INTEGER PRIMARY KEY,
-                item_id INTEGER UNIQUE NOT NULL,
-                category TEXT NOT NULL,
-                name TEXT UNIQUE NOT NULL,
-                description TEXT,
-                icon_url TEXT
+                CREATE TABLE IF NOT EXISTS {TRADE_DB_NAME} (
+                    id INTEGER PRIMARY KEY,
+                    item_id INTEGER REFERENCES {ITEMS_DB_NAME}(item_id),
+                    trade_currency TEXT NOT NULL,
+                    price INTEGER NOT NULL,
+                    trade_volume INTEGER NOT NULL,
+                    trade_timestamp TEXT NOT NULL,
+                    interval INTEGER NOT NULL,
+                    UNIQUE(item_id, trade_timestamp)
                 );
                 """
             )
+            conn.commit()
             
     def insert(self,item_id:str, trade_currency:str,interval:int, price_data:PriceLogEntry):
-        with get_conn() as conn:
-            conn.execute(
-                f"INSERT INTO {TRADE_DB_NAME} (item_id, trade_currency, price, trade_volume, trade_timestamp, interval) "
-                "VALUES (?, ?, ?, ?, ?, ?) "
-                "ON CONFLICT(item_id, trade_timestamp) DO NOTHING;",
-                (
-                    item_id,
-                    trade_currency,
-                    price_data.get("Price"),
-                    price_data.get("Quantity"),
-                    price_data.get("Time"),
-                    interval
-                ),
-                )
-            conn.commit()        
+        try:
+            with get_conn() as conn:
+                conn.execute(
+                    f"INSERT INTO {TRADE_DB_NAME} (item_id, trade_currency, price, trade_volume, trade_timestamp, interval) "
+                    "VALUES (?, ?, ?, ?, ?, ?) "
+                    "ON CONFLICT(item_id, trade_timestamp) DO NOTHING;",
+                    (
+                        item_id,
+                        trade_currency,
+                        price_data.get("Price"),
+                        price_data.get("Quantity"),
+                        price_data.get("Time"),
+                        interval
+                    ),
+                    )
+                conn.commit()
+        except Exception as error:    
+            print()
+            print("Unable to handle error:")
+            print(error)
+            print() 
