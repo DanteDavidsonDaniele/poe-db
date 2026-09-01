@@ -4,9 +4,9 @@ import uvicorn
 
 from fastapi import FastAPI
 from app.config import LOG_LEVEL
-from app.repository.items import init_items_db
+from app.repository.items import ItemRepository
 from app.repository.currency import  init_price_db
-from app.service.poe.items.items import handle_item_overview
+from app.service.poe.items.items import ItemService
 
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -17,18 +17,24 @@ log = logging.getLogger(__name__)
 HOST = "0.0.0.0"
 PORT = 8000
 
+# Repositories
+item_repository = ItemRepository()
+item_repository.init_db()
+
+# Services
+item_service = ItemService(item_repository)
+
 app = FastAPI()
 
 @app.get("/")
 def read_root():
-    init_items_db()
     init_price_db()
     return {"Hello": "World"}
 
 
 @app.get("/items")
 def read_item():
-    items = handle_item_overview()
+    items = item_service.get_item_ids()
     return {"response":items}
 
 
