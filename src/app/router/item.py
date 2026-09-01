@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.repository.items import ItemRepository
-from app.service.poe.items.items import ItemService
+from app.service.items import ItemService
 
 
 class ItemRouter():
