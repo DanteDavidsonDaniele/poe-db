@@ -16,6 +16,12 @@ class TradeRouter():
             items = asyncio.run(self.service.get_item_price_data("1"))
             return items
         
+    def _add_all(self):
+        @self.router.post("/")
+        def add_all():
+            items = asyncio.run(self.service.get_item_price_data("1"))
+            return items
+        
     def init_router(self):
         self._get_all()
         # self._get_ids()
