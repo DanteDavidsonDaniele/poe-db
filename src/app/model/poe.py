@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 
 class PriceLogEntry(TypedDict):
@@ -12,7 +12,7 @@ class Item(TypedDict):
     description: str
     category: str
     icon_url: str
-    price_data: list[PriceLogEntry]
+    price_data: NotRequired[list[PriceLogEntry]]
 
 class CurrencyItemMetadata(TypedDict):
     name: str
@@ -40,3 +40,17 @@ class ScoutCurrencyResponse(TypedDict):
     Pages: int
     Total: int
     Items: list[ScoutCurrencyEntry]
+
+
+class ScoutItemEntry(TypedDict):
+        ItemId: int
+        CategoryApiId: str
+        Text: str
+        Name: str
+        Type: str
+        ApiId: int
+        BaseItemTypeId: int
+        CurrentPrice: int
+        IconUrl: str
+class ScoutItemResponse(TypedDict):
+    data: list[ScoutItemEntry]
