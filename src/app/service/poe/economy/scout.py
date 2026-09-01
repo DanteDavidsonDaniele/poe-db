@@ -5,7 +5,8 @@ import requests
 import aiohttp
 
 from app.model.poe import ScoutCurrencyResponse, Item, ScoutItemEntry, ScoutItemResponse
-from app.repository.items import insert_item, insert_price_log
+from app.repository.items import insert_item
+from app.repository.currency import insert_price_log
 URL = "https://api.poe2scout.com/poe2/Leagues/runes/Currencies/ByCategory?Category=currency&ReferenceCurrency=exalted&Page=1&PerPage=50&DataPoints=8&FrequencyHours=24"
 ITEM_URL = "https://api.poe2scout.com/poe2/Leagues/runes/Items"
 
