@@ -1,8 +1,6 @@
 from app.model.poe import Item
 from app.repository.db import get_conn
-
-ITEMS_DB_NAME: str = "items"
-PRICE_DB_NAME: str = "pricing"
+from app.repository.db_constants import ITEMS_DB_NAME
 
 def init_items_db() -> None:
     """Creates the items reference table if it does not already exist"""

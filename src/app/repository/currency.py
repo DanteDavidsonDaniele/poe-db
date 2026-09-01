@@ -1,8 +1,6 @@
 from app.model.poe import PriceLogEntry
 from app.repository.db import get_conn
-
-ITEMS_DB_NAME: str = "items"
-PRICE_DB_NAME: str = "pricing"
+from app.repository.db_constants import ITEMS_DB_NAME, PRICE_DB_NAME
 
 def init_price_db() -> None:
     """Creates the item price history table if it does not already exist"""
