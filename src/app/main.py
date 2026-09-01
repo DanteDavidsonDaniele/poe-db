@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from app.config import LOG_LEVEL
 from app.repository.items import ItemRepository
 from app.repository.currency import  init_price_db
+from app.router.item import ItemRouter
 from app.service.poe.items.items import ItemService
 
 logging.basicConfig(
@@ -24,18 +25,22 @@ item_repository.init_db()
 # Services
 item_service = ItemService(item_repository)
 
+# Routers
+
+item_router = ItemRouter(item_repository,item_service)
+item_router.init_router()
 app = FastAPI()
+app.include_router(item_router.router,prefix="/items")
+# @app.get("/")
+# def read_root():
+#     init_price_db()
+#     return {"Hello": "World"}
 
-@app.get("/")
-def read_root():
-    init_price_db()
-    return {"Hello": "World"}
 
-
-@app.get("/items")
-def read_item():
-    items = item_service.get_item_ids()
-    return {"response":items}
+# @app.get("/items")
+# def read_item():
+#     items = item_service.get_item_ids()
+#     return {"response":items}
 
 
 if __name__ == "__main__":

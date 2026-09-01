@@ -4,9 +4,9 @@ class ItemService():
        self.repository = repository
        self._internal = 0
 
-   def get_item_ids(self):
+   def get_item_ids(self,fields=["*"]):
        try:
-           items = self.repository.read(["item_id"])
+           items = self.repository.read(fields)
            print(items)
            return items
        except:
