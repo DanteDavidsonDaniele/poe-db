@@ -5,9 +5,11 @@ import uvicorn
 from fastapi import FastAPI
 from app.config import LOG_LEVEL
 from app.repository.items import ItemRepository
-from app.repository.currency import  init_price_db
+from app.repository.trade import  TradeRepository
 from app.router.item import ItemRouter
+from app.router.trade import TradeRouter
 from app.service.poe.items.items import ItemService
+from app.service.trade import TradeService
 
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -22,25 +24,23 @@ PORT = 8000
 item_repository = ItemRepository()
 item_repository.init_db()
 
+trade_repository = TradeRepository()
+
 # Services
 item_service = ItemService(item_repository)
+trade_service = TradeService(trade_repository)
 
 # Routers
 
 item_router = ItemRouter(item_repository,item_service)
 item_router.init_router()
+
+trade_router = TradeRouter(trade_repository,trade_service)
+trade_router.init_router()
+
 app = FastAPI()
 app.include_router(item_router.router,prefix="/items")
-# @app.get("/")
-# def read_root():
-#     init_price_db()
-#     return {"Hello": "World"}
-
-
-# @app.get("/items")
-# def read_item():
-#     items = item_service.get_item_ids()
-#     return {"response":items}
+app.include_router(trade_router.router,prefix="/trade")
 
 
 if __name__ == "__main__":
