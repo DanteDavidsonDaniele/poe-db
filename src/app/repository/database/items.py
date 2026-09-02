@@ -1,6 +1,7 @@
+from app.repository.database.sqlite import Row
 from app.model.poe import Item
-from app.repository.db import get_conn
-from app.repository.db_constants import ITEMS_DB_NAME
+from app.repository.database.db import get_conn
+from app.repository.database.db_constants import ITEMS_DB_NAME
 
 
 class ItemRepository():
@@ -39,7 +40,7 @@ class ItemRepository():
                 )
             conn.commit()
 
-    def read(self, fields = ["*"]) -> list[str]:
+    def read(self, fields = ["*"]) -> list[Row]:
         query_fields = ", ".join(fields)
         print(query_fields)
         with get_conn() as conn:

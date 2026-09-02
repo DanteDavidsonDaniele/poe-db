@@ -38,8 +38,10 @@ class TradeRepository():
                     ),
                     )
                 conn.commit()
+                return [f"Item {item_id} added to table.", None]
         except Exception as error:    
             print()
             print("Unable to handle error:")
             print(error)
             print() 
+            return [None, "Database"]
