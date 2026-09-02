@@ -40,7 +40,7 @@ trade_router.init_router()
 
 app = FastAPI()
 app.include_router(item_router.router,prefix="/items")
-app.include_router(trade_router.router,prefix="/trade")
+app.include_router(trade_router.router,prefix="/trade ")
 
 
 if __name__ == "__main__":

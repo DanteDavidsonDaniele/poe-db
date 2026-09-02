@@ -1,14 +1,14 @@
 import asyncio
 from fastapi import APIRouter
-from app.repository.trade import TradeRepository
-from app.service.constants import TRADE_CURRENCY
+from app.repository.database.trade import TradeRepository
+from app.repository.api.constants import TRADE_CURRENCY
+from app.service.items import ItemService
 from app.service.trade import TradeService
 
-
 class TradeRouter():
-    def __init__(self, repository: TradeRepository, service: TradeService):  
-       self.repository = repository
+    def __init__(self, service: TradeService, item_service: ItemService):  
        self.service = service
+       self.item_service = item_service
        self.router = APIRouter()
 
     def _get_all(self):
@@ -23,11 +23,9 @@ class TradeRouter():
             try:
                 item_string_id = str(item_id)
                 data =  asyncio.run(self.service.get_item_price_data(item_string_id))
-                #print(data)
                 if data is None:
                     return None
                 items = data["PriceHistory"]
-                #print(items)
                 for item in items:
                     print()
                     print(item)
@@ -39,8 +37,13 @@ class TradeRouter():
             except:
                 print("unable to add item's price history")
                 return None
+    # def _post_all(self):
+    #     @self.router.post("/all")
+    #     def post_all():
+    #         try:
+    #         except:
+
         
     def init_router(self):
         self._get_all()
         self._post_single()
-        # self._get_ids()

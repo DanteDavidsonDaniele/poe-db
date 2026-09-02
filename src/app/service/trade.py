@@ -1,8 +1,8 @@
 import aiohttp
 import requests
 from app.model.poe import ScoutCurrencyResponse
-from app.repository.trade import TradeRepository
-from app.service.constants import BASE_URL, LEAGUE, REALM
+from app.repository.database.trade import TradeRepository
+from app.repository.api.constants import BASE_URL, LEAGUE, REALM
 
 class TradeService():
   def __init__(self, repository:TradeRepository):

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.repository.items import ItemRepository
+from app.repository.database.items import ItemRepository
 from app.service.items import ItemService
 
 
