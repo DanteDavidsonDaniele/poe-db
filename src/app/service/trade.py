@@ -15,6 +15,14 @@ class TradeService():
   def get_item_price_data(self, id):
     return asyncio.run(self.scout_repository.get_item_price_data(id))
   
+  def get_item_trade_history(self,id:int):
+    rows = self.database_repository.read_item(id)
+    if rows is None:
+      return None
+    for row in rows:
+      temp = row.column
+    return self.database_repository.read_item(id)
+  
   def _add_price_data(self,item_id,price_data:PriceLogEntry):
     self.database_repository.insert(item_id,self._currency,0,price_data)
   

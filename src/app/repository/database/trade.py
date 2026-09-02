@@ -1,6 +1,7 @@
 from app.model.poe import PriceLogEntry
 from app.repository.database.db import get_conn
 from app.repository.database.db_constants import ITEMS_DB_NAME, TRADE_DB_NAME
+from app.repository.database.sqlite import Row
 
 class TradeRepository():
     def __init__(self):       # constructor
@@ -20,6 +21,20 @@ class TradeRepository():
                 """
             )
             conn.commit()
+
+    def read_item(self, item_id: int):
+        try:
+            with get_conn() as conn:
+                cursor = conn.execute(
+                    f"SELECT * FROM {TRADE_DB_NAME} WHERE item_id = ?",
+                    (item_id,)
+                )
+                rows: list[Row] = cursor.fetchall()
+                return rows
+        except Exception as error:
+            print("Failed to get items")
+            return None
+
             
     def insert(self,item_id:str, trade_currency:str,interval:int, price_data:PriceLogEntry):
         try:
@@ -39,6 +54,7 @@ class TradeRepository():
                     )
                 conn.commit()
                 return [f"Item {item_id} added to table.", None]
+            
         except Exception as error:    
             print()
             print("Unable to handle error:")
