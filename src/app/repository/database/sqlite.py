@@ -12,20 +12,13 @@ class Row(SQLiteRow):
 
     @property
     def column(self):
-        full_column = []
+        full_column = {}
         for index, column_key in enumerate(self.column_keys):
             column_value = self.column_values[index]
-            full_column.append({column_key:column_value})
+            full_column[column_key] = column_value
         print(full_column)
         return full_column
-        # values = self.column_keys,self.column_values
-        # final = []
-        # print(values)
-        # for index, value in enumerate(values):
-        #     print(value)
-        #     #final.append([value[0][index],value[1][index]])
-        #     #print(final[index])
-        # return final
+
 
     def stringify_field(self,index=0) -> str:
         field = self.column_values[index]
