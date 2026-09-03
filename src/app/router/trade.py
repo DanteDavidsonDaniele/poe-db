@@ -14,13 +14,12 @@ class TradeRouter():
     def _get_all(self):
        @self.router.get("/")
        def get_all():
-          #self.service.add_price_data()
           items = self.service.get_item_price_data("1")
           return items
+       
     def _get_single(self):
        @self.router.get("/{item_id}")
        def get_single(item_id:int):
-          print(item_id)
           rows = self.service.get_item_trade_history(item_id)
           trade_history = []
           if rows is None:
@@ -28,10 +27,20 @@ class TradeRouter():
           for row in rows:
              trade_history.append(row.column)
           return trade_history
+
+    def _post_all(self):
+       @self.router.post("/")
+       def post_all():
+          try:
+            self.service.add_price_data()
+            return "Prices updated"
+          except:
+            return "Unable to updated prices"
         
     def init_router(self):
         self._get_all()
         self._get_single()
+        self._post_all()
         
     # def _post_single(self):
     #     @self.router.post("/{item_id}")
