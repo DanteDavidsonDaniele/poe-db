@@ -4,6 +4,7 @@ import asyncio
 import httpx
 
 from app.model.poe import ScoutCurrencyResponse, Item, ScoutItemEntry, ScoutItemResponse
+from app.repository.api.api import APIClient
 from app.repository.api.constants import LEAGUE, REALM
 
 
@@ -15,21 +16,12 @@ URL_PATH : str = "/poe2/Leagues/runes/Currencies/ByCategory"
 TRADE_CURRENCY = "exalted"   
 INTERVAL = 24
 
-class ScoutRepository():
+class ScoutRepository(APIClient):
   BASE_URL : str = "https://api.poe2scout.com"
-  def __init__(self):
-    self._client = httpx.AsyncClient(
-        base_url=self.BASE_URL,
-        timeout=httpx.Timeout(10.0,connect=5.0),
-        limits=httpx.Limits(max_connections=20, max_keepalive_connections=10)
-    )
-    self._sem = asyncio.Semaphore(10)
+  def __init__(self, base_url = BASE_URL):
+    super().__init__(base_url)
     self.query_string = "History?logCount=100&referenceCurrency=exalted"
     self.scoutCurrencyData: ScoutCurrencyResponse | None
-
-  async def aclose(self) -> None:
-        await self._client.aclose()
-
 
   async def get_item_price_data(self, id):
     async with self._sem:
