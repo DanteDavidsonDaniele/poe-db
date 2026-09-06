@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from app.config import LOG_LEVEL
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import  TradeRepository
-from app.repository.api.scout import  ScoutRepository
+from app.repository.api.scout.scout import  ScoutRepository
 from app.router.item import ItemRouter
 from app.router.trade import TradeRouter
 from app.service.items import ItemService

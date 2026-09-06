@@ -1,6 +1,6 @@
 import asyncio
 from app.model.poe import PriceLogEntry, ScoutCurrencyResponse
-from app.repository.api.scout import ScoutRepository
+from app.repository.api.scout.scout import ScoutRepository
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import TradeRepository
 from app.repository.api.constants import BASE_URL, LEAGUE, REALM, TRADE_CURRENCY
