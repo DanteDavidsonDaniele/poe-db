@@ -12,8 +12,9 @@ class TradeService():
     self.item_database_repository = item_database_repository
     self._currency = TRADE_CURRENCY
 
-  def get_item_price_data(self, id):
-    return asyncio.run(self.scout_repository.get_item_price_data(id))
+  async def get_item_price_data(self, id):
+    return await self.scout_repository.get_item_price_data(id)
+    #return asyncio.run(self.scout_repository.get_item_price_data(id))
   
   def get_item_trade_history(self,id:int):
     rows = self.database_repository.read_item(id)

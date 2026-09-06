@@ -1,9 +1,10 @@
 """Entrypoint. Run with: python -m app.main"""
 import logging
 import uvicorn
-
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config import LOG_LEVEL
+
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import  TradeRepository
 from app.repository.api.scout.scout import  ScoutRepository
@@ -39,9 +40,14 @@ item_router = ItemRouter(item_repository,item_service)
 item_router.init_router()
 
 trade_router = TradeRouter(trade_service,item_service)
-trade_router.init_router()
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield                    # startup work goes above this line
+    await api.aclose() 
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(item_router.router,prefix="/items")
 app.include_router(trade_router.router,prefix="/trade")
 
