@@ -5,11 +5,11 @@ from app.repository.database.db_constants import ITEMS_DB_NAME
 
 
 class ItemRepository():
-    def __init__(self):       # constructor
-        self._internal = 0
+    def __init__(self):
+        self._init_db()
     
     @staticmethod
-    def init_db():
+    def _init_db():
         with get_conn() as conn:
             conn.executescript(
                 f"""

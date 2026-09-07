@@ -42,9 +42,7 @@ PORT = 8000
 
 # # Routers
 
-# item_router = ItemRouter(item_repository,item_service)
-# item_router.init_router()
-
+item_router = ItemRouter()
 trade_router = TradeRouter()
 # source_router = POESourceRouter(source_service)
 
@@ -52,10 +50,9 @@ trade_router = TradeRouter()
 async def lifespan(app: FastAPI):
 
     item_repository = ItemRepository()
-    item_repository.init_db()
     scout_repository = ScoutRepository()
     trade_repository = TradeRepository()
-
+    app.state.item_service = ItemService(item_repository)
     app.state.trade_service = TradeService(trade_repository, scout_repository, item_repository)
 
     closeable = (scout_repository,)
@@ -66,7 +63,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-# app.include_router(item_router.router,prefix="/items")
+app.include_router(item_router._router,prefix="/items")
 app.include_router(trade_router.router,prefix="/trade")
 
 
