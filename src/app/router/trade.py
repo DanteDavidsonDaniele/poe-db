@@ -1,23 +1,24 @@
 from fastapi import APIRouter, Depends, Request
+from app.router.router import AppRouter
 from app.service.trade import TradeService
 
-def get_trade_service(request: Request) -> TradeService:
+def trade_service(request: Request) -> TradeService:
     return request.app.state.trade_service
 
-class TradeRouter():
+class TradeRouter(AppRouter):
     def __init__(self):  
        self.router = APIRouter()
-       self._init_router()
+       self._init_routes()
 
     def _get_all(self):
        @self.router.get("/")
-       async def get_all(service:TradeService = Depends(get_trade_service)):
+       async def get_all(service:TradeService = Depends(trade_service)):
           return await service.get_item_price_data("1")
           
        
     def _get_single(self):
        @self.router.get("/{item_id}")
-       async def get_single(item_id:int,service:TradeService = Depends(get_trade_service)):
+       async def get_single(item_id:int,service:TradeService = Depends(trade_service)):
           rows = service.get_item_trade_history(item_id)
           trade_history = []
           if rows is None:
@@ -28,14 +29,13 @@ class TradeRouter():
 
     def _post_all(self):
        @self.router.post("/")
-       async def post_all(service:TradeService = Depends(get_trade_service)):
+       async def post_all(service:TradeService = Depends(trade_service)):
           try:
             return await service.add_price_data()
-            return "Prices updated"
           except:
             return "Unable to updated prices"
         
-    def _init_router(self):
+    def _init_routes(self):
         self._get_all()
         self._get_single()
         self._post_all()
