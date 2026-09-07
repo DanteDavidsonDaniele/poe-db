@@ -26,38 +26,8 @@ class ScoutRepository(APIClient):
   async def get_item_price_data(self, id):
     async with self._sem:
        endpoint = "/".join([REALM,"Leagues",LEAGUE,"Items",id, self.query_string])
-       return await self._client.get(endpoint)
-    
-#   async def getPoeScoutOverview(self) -> ScoutCurrencyResponse | None:
-#     try:
-#         async with aiohttp.ClientSession() as session:
-#             async with session.get(URL) as response:
-#                 data: ScoutCurrencyResponse = await response.json()
-#                 print(data)
-#                 return data 
-#     except requests.exceptions.HTTPError as error:
-#         print(error)
-#         return None
-    
-#   async def getPoeScoutItemOverview(self) -> ScoutItemResponse | None:
-#     try:
-#         async with aiohttp.ClientSession() as session:
-#             async with session.get(ITEM_URL) as response:
-#                 data: ScoutItemResponse = await response.json()
-#                 print(data)
-#                 return data 
-#     except requests.exceptions.HTTPError as error:
-#         print(error)
-#         return None
+       response = await self._client.get(endpoint)
+       return {**response.json(),"ItemId":id}
 
-#     formattedItemData: list[Item] = []
-#     for item in data:
-#         formattedItem: Item = {
-#             "category": item["CategoryApiId"],
-#             "description": item["Text"],
-#             "name":item["Name"],
-#             "item_id":item["ItemId"],
-#             "icon_url": item["IconUrl"]
-#         }
-#         formattedItemData.append(formattedItem)
-#     return formattedItemData
+  async def get_all_item_price_data(self,ids:list[str]):
+      return await asyncio.gather(*(self.get_item_price_data(id) for id in ids))

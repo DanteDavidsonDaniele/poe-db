@@ -6,15 +6,15 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config import LOG_LEVEL
 
-from app.repository.api.ggg.ggg import GGGRepository
+# from app.repository.api.ggg.ggg import GGGRepository
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import  TradeRepository
 from app.repository.api.scout.scout import  ScoutRepository
 from app.router.item import ItemRouter
-from app.router.path_of_exile_source import POESourceRouter
+# from app.router.path_of_exile_source import POESourceRouter
 from app.router.trade import TradeRouter
 from app.service.items import ItemService
-from app.service.path_of_exile_source import POESourceService
+# from app.service.path_of_exile_source import POESourceService
 from app.service.trade import TradeService
 
 logging.basicConfig(

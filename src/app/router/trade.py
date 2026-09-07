@@ -1,8 +1,4 @@
-import asyncio
 from fastapi import APIRouter, Depends, Request
-from app.repository.database.trade import TradeRepository
-from app.repository.api.constants import TRADE_CURRENCY
-from app.service.items import ItemService
 from app.service.trade import TradeService
 
 def get_trade_service(request: Request) -> TradeService:
@@ -34,7 +30,7 @@ class TradeRouter():
        @self.router.post("/")
        async def post_all(service:TradeService = Depends(get_trade_service)):
           try:
-            service.add_price_data()
+            return await service.add_price_data()
             return "Prices updated"
           except:
             return "Unable to updated prices"
