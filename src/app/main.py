@@ -1,16 +1,20 @@
 """Entrypoint. Run with: python -m app.main"""
+import asyncio
 import logging
 import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config import LOG_LEVEL
 
+from app.repository.api.ggg.ggg import GGGRepository
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import  TradeRepository
 from app.repository.api.scout.scout import  ScoutRepository
 from app.router.item import ItemRouter
+from app.router.path_of_exile_source import POESourceRouter
 from app.router.trade import TradeRouter
 from app.service.items import ItemService
+from app.service.path_of_exile_source import POESourceService
 from app.service.trade import TradeService
 
 logging.basicConfig(
@@ -22,33 +26,47 @@ log = logging.getLogger(__name__)
 HOST = "0.0.0.0"
 PORT = 8000
 
-# Repositories
-item_repository = ItemRepository()
-item_repository.init_db()
+# # Repositories
+# item_repository = ItemRepository()
+# item_repository.init_db()
 
-trade_repository = TradeRepository()
 
-scout_repository = ScoutRepository()
+# scout_repository = ScoutRepository()
 
-# Services
-item_service = ItemService(item_repository)
-trade_service = TradeService(trade_repository, scout_repository, item_repository)
+# ggg_repository = GGGRepository()
 
-# Routers
+# # Services
+# item_service = ItemService(item_repository)
+# # trade_service = TradeService(trade_repository, scout_repository, item_repository)
+# source_service = POESourceService(ggg_repository)
 
-item_router = ItemRouter(item_repository,item_service)
-item_router.init_router()
+# # Routers
 
-trade_router = TradeRouter(trade_service,item_service)
+# item_router = ItemRouter(item_repository,item_service)
+# item_router.init_router()
+
+trade_router = TradeRouter()
+# source_router = POESourceRouter(source_service)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    yield                    # startup work goes above this line
-    await api.aclose() 
+
+    item_repository = ItemRepository()
+    item_repository.init_db()
+    scout_repository = ScoutRepository()
+    trade_repository = TradeRepository()
+
+    app.state.trade_service = TradeService(trade_repository, scout_repository, item_repository)
+
+    closeable = (scout_repository,)
+
+    yield
+
+    await asyncio.gather(*(r.aclose() for r in closeable), return_exceptions=True)
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(item_router.router,prefix="/items")
+# app.include_router(item_router.router,prefix="/items")
 app.include_router(trade_router.router,prefix="/trade")
 
 

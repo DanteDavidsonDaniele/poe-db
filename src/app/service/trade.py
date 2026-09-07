@@ -13,7 +13,8 @@ class TradeService():
     self._currency = TRADE_CURRENCY
 
   async def get_item_price_data(self, id):
-    return await self.scout_repository.get_item_price_data(id)
+    data = await self.scout_repository.get_item_price_data(id)
+    return data.json()
     #return asyncio.run(self.scout_repository.get_item_price_data(id))
   
   def get_item_trade_history(self,id:int):
