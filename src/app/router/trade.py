@@ -7,6 +7,7 @@ def trade_service(request: Request) -> TradeService:
 
 class TradeRouter(AppRouter):
     def __init__(self):  
+       super().__init__()
        self.router = APIRouter()
        self._init_routes()
 

@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, Request
+from app.router.router import AppRouter
 from app.service.items import ItemService
 
 def item_service(request: Request) -> ItemService:
     return request.app.state.item_service
 
-class ItemRouter():
+class ItemRouter(AppRouter):
     def __init__(self):  
+       super().__init__()
        self._router = APIRouter()
        self._init_routes()
 

@@ -7,5 +7,5 @@ class AppRouter(Protocol):
     _router:APIRouter
 
     @abstractmethod
-    def __init_routes(self):
+    def _init_routes(self):
         raise NotImplementedError
