@@ -8,17 +8,17 @@ def trade_service(request: Request) -> TradeService:
 class TradeRouter(AppRouter):
     def __init__(self):  
        super().__init__()
-       self.router = APIRouter()
+       self._router = APIRouter()
        self._init_routes()
 
     def _get_all(self):
-       @self.router.get("/")
+       @self._router.get("/")
        async def get_all(service:TradeService = Depends(trade_service)):
           return await service.get_item_price_data("1")
           
        
     def _get_single(self):
-       @self.router.get("/{item_id}")
+       @self._router.get("/{item_id}")
        async def get_single(item_id:int,service:TradeService = Depends(trade_service)):
           rows = service.get_item_trade_history(item_id)
           trade_history = []
@@ -29,7 +29,7 @@ class TradeRouter(AppRouter):
           return trade_history
 
     def _post_all(self):
-       @self.router.post("/")
+       @self._router.post("/")
        async def post_all(service:TradeService = Depends(trade_service)):
           try:
             return await service.add_price_data()

@@ -7,14 +7,17 @@ from fastapi import FastAPI
 from app.config import LOG_LEVEL
 
 # from app.repository.api.ggg.ggg import GGGRepository
+from app.repository.api.ggg.ggg import GGGRepository
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import  TradeRepository
 from app.repository.api.scout.scout import  ScoutRepository
 from app.router.item import ItemRouter
 # from app.router.path_of_exile_source import POESourceRouter
+from app.router.path_of_exile_source import POESourceRouter
 from app.router.trade import TradeRouter
 from app.service.items import ItemService
 # from app.service.path_of_exile_source import POESourceService
+from app.service.path_of_exile_source import POESourceService
 from app.service.trade import TradeService
 
 logging.basicConfig(
@@ -44,7 +47,7 @@ PORT = 8000
 
 item_router = ItemRouter()
 trade_router = TradeRouter()
-# source_router = POESourceRouter(source_service)
+source_router = POESourceRouter()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -52,10 +55,12 @@ async def lifespan(app: FastAPI):
     item_repository = ItemRepository()
     scout_repository = ScoutRepository()
     trade_repository = TradeRepository()
+    ggg_repository = GGGRepository()
     app.state.item_service = ItemService(item_repository)
+    app.state.source_service = POESourceService(ggg_repository)
     app.state.trade_service = TradeService(trade_repository, scout_repository, item_repository)
 
-    closeable = (scout_repository,)
+    closeable = (scout_repository,ggg_repository,)
 
     yield
 
@@ -64,8 +69,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(item_router._router,prefix="/items")
-app.include_router(trade_router.router,prefix="/trade")
-
+app.include_router(trade_router._router,prefix="/trade")
+app.include_router(source_router._router,prefix="/source")
 
 if __name__ == "__main__":
     uvicorn.run(app, host=HOST, port=PORT, log_level=LOG_LEVEL.lower())
