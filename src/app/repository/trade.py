@@ -1,7 +1,7 @@
 from app.model.poe import PriceLogEntry
-from app.repository.database.db import get_conn
-from app.repository.database.db_constants import ITEMS_DB_NAME, TRADE_DB_NAME
-from app.repository.database.sqlite import Row
+from app.repository.db import get_conn
+from app.repository.db_constants import ITEMS_DB_NAME, TRADE_DB_NAME
+from app.repository.sqlite import Row
 
 class TradeRepository():
     def __init__(self):       # constructor

@@ -1,7 +1,7 @@
 """SQLite helpers. Stdlib only - no ORM needed at this stage."""
 
 import sqlite3
-from app.repository.database.sqlite import Row
+from app.repository.sqlite import Row
 from contextlib import contextmanager
 from app.config import DB_PATH
 

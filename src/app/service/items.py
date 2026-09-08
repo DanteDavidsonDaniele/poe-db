@@ -1,4 +1,4 @@
-from app.repository.database.items import ItemRepository
+from app.repository.items import ItemRepository
 class ItemService():
    def __init__(self, repository: ItemRepository):  
        self.repository = repository

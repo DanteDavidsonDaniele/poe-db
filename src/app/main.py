@@ -6,8 +6,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config import LOG_LEVEL
 
-from app.repository.database.items import ItemRepository
-from app.repository.database.trade import  TradeRepository
+from app.repository.items import ItemRepository
+from app.repository.trade import  TradeRepository
 from app.client.scout.scout import  ScoutClient
 from app.router.item import ItemRouter
 from app.router.trade import TradeRouter
