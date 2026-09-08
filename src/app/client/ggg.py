@@ -1,4 +1,5 @@
-from app.repository.api.api import APIClient
+from app.client.client import APIClient
+from app.model.api.ggg import League, parse_leagues
 
 
 class GGGClient(APIClient):
@@ -9,5 +10,7 @@ class GGGClient(APIClient):
 
   async def get_leagues(self):
     async with self._sem:
-       return await self._client.get(self.LEAGUES_PATH)
+       response = await self._client.get(self.LEAGUES_PATH)
+    response.raise_for_status()
+    return parse_leagues(response.json())
     
