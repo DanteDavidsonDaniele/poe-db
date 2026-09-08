@@ -23,6 +23,12 @@ class ItemRouter(AppRouter):
             items = service.get_item_ids(["item_id"])
             return items
         
+    def _get_item_categories(self):
+        @self._router.get("/categories")
+        async def get_item_categories(service:ItemService = Depends(item_service)):
+            return await service.get_item_categories()
+        
     def _init_routes(self):
         self._get_all()
         self._get_ids()
+        self._get_item_categories()

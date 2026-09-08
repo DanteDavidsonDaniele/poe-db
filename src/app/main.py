@@ -1,20 +1,28 @@
-"""Entrypoint. Run with: python -m app.main"""
+# Libs
 import asyncio
 import logging
 import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.client.ggg import GGGClient
+
+# Config
 from app.config import LOG_LEVEL
 
+# Repositories
 from app.repository.items import ItemRepository
 from app.repository.trade import  TradeRepository
+
+# Clients
 from app.client.scout import  ScoutClient
+from app.client.ggg import GGGClient
+
+# Routers
 from app.router.item import ItemRouter
 from app.router.leagues import LeagueRouter
 from app.router.trade import TradeRouter
-from app.service.items import ItemService
 
+# Services
+from app.service.items import ItemService
 from app.service.leagues import LeagueService
 from app.service.trade import TradeService
 
@@ -27,22 +35,7 @@ log = logging.getLogger(__name__)
 HOST = "0.0.0.0"
 PORT = 8000
 
-# # Repositories
-# item_repository = ItemRepository()
-# item_repository.init_db()
-
-
-# scout_repository = ScoutRepository()
-
-# ggg_repository = GGGRepository()
-
-# # Services
-# item_service = ItemService(item_repository)
-# # trade_service = TradeService(trade_repository, scout_repository, item_repository)
-# source_service = POESourceService(ggg_repository)
-
-# # Routers
-
+# Initialise Routers
 item_router = ItemRouter()
 league_router = LeagueRouter()
 trade_router = TradeRouter()
@@ -50,17 +43,21 @@ trade_router = TradeRouter()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
+    # Initialise Repositories
     item_repository = ItemRepository()
     trade_repository = TradeRepository()
 
-    scout_repository = ScoutClient()
+
+    # Initialise Clients
     ggg_client = GGGClient()
+    scout_client = ScoutClient()
 
-    app.state.item_service = ItemService(item_repository)
+    # Initialise Services
+    app.state.item_service = ItemService(item_repository,ggg_client)
     app.state.league_service = LeagueService(ggg_client)
-    app.state.trade_service = TradeService(trade_repository, scout_repository, item_repository)
+    app.state.trade_service = TradeService(trade_repository, scout_client, item_repository)
 
-    closeable = (scout_repository,ggg_client,)
+    closeable = (scout_client,ggg_client,)
 
     yield
 

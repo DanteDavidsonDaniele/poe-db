@@ -1,30 +1,27 @@
-import asyncio
 from sqlite3 import Row
-
 from fastapi import Response
 from app.model.poe import PriceLogEntry
 from app.client.scout import ScoutClient
 from app.repository.items import ItemRepository
 from app.repository.trade import TradeRepository
-from app.client.constants import BASE_URL, LEAGUE, REALM, TRADE_CURRENCY
+from app.client.constants import TRADE_CURRENCY
 
 class TradeService():
-  def __init__(self, database_repository:TradeRepository, scout_repository: ScoutClient, item_database_repository: ItemRepository):
-    self.database_repository = database_repository
-    self.scout_repository = scout_repository
-    self.item_database_repository = item_database_repository
+  def __init__(self, trade_repository: TradeRepository, item_repository: ItemRepository, scout_client: ScoutClient):
+    self._trade_repository = trade_repository
+    self._scout_client = scout_client
+    self._item_repository = item_repository
     self._currency = TRADE_CURRENCY
     self._concurrent = 10
 
   async def get_item_price_data(self, id):
-
-    return await self.scout_repository.get_item_price_data(id)
+    return await self._scout_client.get_item_price_data(id)
   
   def get_item_trade_history(self,id:int):
-    return self.database_repository.read_item(id)
+    return self._trade_repository.read_item(id)
   
   def _add_price_data(self,item_id, price_data:PriceLogEntry):
-    self.database_repository.insert(item_id,self._currency,0,price_data)
+    self._trade_repository.insert(item_id,self._currency,0,price_data)
 
   def _handle_item_row(self, row: Row):
     item_id = row.stringify_field()
@@ -40,11 +37,11 @@ class TradeService():
     for price in price_history:
       if price is None:
         continue
-      self.database_repository.insert(item_id,self._currency,0,price)
+      self._trade_repository.insert(item_id,self._currency,0,price)
 
   async def add_price_data(self):
-    rows = self.item_database_repository.read(["item_id"])
+    rows = self._item_repository.read(["item_id"])
     row_ids = [row.stringify_field() for row in rows]
-    response = await self.scout_repository.get_all_item_price_data(row_ids)
+    response = await self._scout_client.get_all_item_price_data(row_ids)
     return [self._handle_price_item(field) for field in response]
  
