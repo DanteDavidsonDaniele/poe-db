@@ -4,8 +4,8 @@ import asyncio
 import httpx
 
 from app.model.poe import ScoutCurrencyResponse, Item, ScoutItemEntry, ScoutItemResponse
-from app.repository.api.api import APIClient
-from app.repository.api.constants import LEAGUE, REALM
+from app.client.client import APIClient
+from app.client.constants import LEAGUE, REALM
 
 
 URL = "https://api.poe2scout.com/poe2/Leagues/runes/Currencies/ByCategory?Category=currency&ReferenceCurrency=exalted&Page=1&PerPage=50&DataPoints=8&FrequencyHours=24"
@@ -16,7 +16,7 @@ URL_PATH : str = "/poe2/Leagues/runes/Currencies/ByCategory"
 TRADE_CURRENCY = "exalted"   
 INTERVAL = 24
 
-class ScoutRepository(APIClient):
+class ScoutClient(APIClient):
   BASE_URL : str = "https://api.poe2scout.com"
   def __init__(self, base_url = BASE_URL):
     super().__init__(base_url)

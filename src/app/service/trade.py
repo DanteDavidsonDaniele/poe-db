@@ -2,14 +2,14 @@ import asyncio
 from sqlite3 import Row
 
 from fastapi import Response
-from app.model.poe import PriceLogEntry, ScoutCurrencyResponse
-from app.repository.api.scout.scout import ScoutRepository
+from app.model.poe import PriceLogEntry
+from app.client.scout.scout import ScoutClient
 from app.repository.database.items import ItemRepository
 from app.repository.database.trade import TradeRepository
-from app.repository.api.constants import BASE_URL, LEAGUE, REALM, TRADE_CURRENCY
+from app.client.constants import BASE_URL, LEAGUE, REALM, TRADE_CURRENCY
 
 class TradeService():
-  def __init__(self, database_repository:TradeRepository, scout_repository: ScoutRepository, item_database_repository: ItemRepository):
+  def __init__(self, database_repository:TradeRepository, scout_repository: ScoutClient, item_database_repository: ItemRepository):
     self.database_repository = database_repository
     self.scout_repository = scout_repository
     self.item_database_repository = item_database_repository

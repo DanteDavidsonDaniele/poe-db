@@ -1,7 +1,7 @@
 from app.repository.api.api import APIClient
 
 
-class GGGRepository(APIClient):
+class GGGClient(APIClient):
   BASE_URL : str = "https://www.pathofexile.com"
   LEAGUES_PATH : str = "/api/trade2/data/leagues"
   def __init__(self, base_url = BASE_URL):
