@@ -8,7 +8,7 @@ from app.config import LOG_LEVEL
 
 from app.repository.items import ItemRepository
 from app.repository.trade import  TradeRepository
-from app.client.scout.scout import  ScoutClient
+from app.client.scout import  ScoutClient
 from app.router.item import ItemRouter
 from app.router.trade import TradeRouter
 from app.service.items import ItemService

@@ -3,7 +3,7 @@ from sqlite3 import Row
 
 from fastapi import Response
 from app.model.poe import PriceLogEntry
-from app.client.scout.scout import ScoutClient
+from app.client.scout import ScoutClient
 from app.repository.items import ItemRepository
 from app.repository.trade import TradeRepository
 from app.client.constants import BASE_URL, LEAGUE, REALM, TRADE_CURRENCY
