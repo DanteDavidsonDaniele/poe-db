@@ -28,7 +28,13 @@ class ItemRouter(AppRouter):
         async def get_item_categories(service:ItemService = Depends(item_service)):
             return await service.get_item_categories()
         
+    def _get_stats(self):
+        @self._router.get("/stats")
+        async def get_item_categories(service:ItemService = Depends(item_service)):
+            return await service.get_stats()
+        
     def _init_routes(self):
         self._get_all()
         self._get_ids()
         self._get_item_categories()
+        self._get_stats()

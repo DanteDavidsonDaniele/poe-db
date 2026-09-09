@@ -1,6 +1,7 @@
 from app.client.client import APIClient
 from app.model.api.ggg.item_categories import parse_item_categories
 from app.model.api.ggg.leagues import parse_leagues
+from app.model.api.ggg.stats import parse_stats
 
 
 class GGGClient(APIClient):
@@ -20,4 +21,11 @@ class GGGClient(APIClient):
       response = await self._client.get("/api/trade2/data/items")
     response.raise_for_status()
     return parse_item_categories(response.json())
+
+  async def get_stats(self):
+    async with self._sem:
+      response = await self._client.get("/api/trade2/data/stats")
+    response.raise_for_status()
+    return parse_stats(response.json())
+    
     

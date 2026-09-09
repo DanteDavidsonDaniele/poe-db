@@ -17,3 +17,5 @@ class ItemService():
    async def get_item_categories(self):
        return await self._ggg_client.get_item_categories()
 
+   async def get_stats(self):
+       return await self._ggg_client.get_stats()
