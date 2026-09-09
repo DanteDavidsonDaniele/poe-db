@@ -11,6 +11,7 @@ from app.config import LOG_LEVEL
 # Repositories
 from app.repository.items import ItemRepository
 from app.repository.trade import  TradeRepository
+from app.repository.stats import StatsRepository
 
 # Clients
 from app.client.scout import  ScoutClient
@@ -46,6 +47,7 @@ async def lifespan(app: FastAPI):
     # Initialise Repositories
     item_repository = ItemRepository()
     trade_repository = TradeRepository()
+    stat_repository = StatsRepository()
 
 
     # Initialise Clients
@@ -53,7 +55,7 @@ async def lifespan(app: FastAPI):
     scout_client = ScoutClient()
 
     # Initialise Services
-    app.state.item_service = ItemService(item_repository,ggg_client)
+    app.state.item_service = ItemService(item_repository,stat_repository,ggg_client)
     app.state.league_service = LeagueService(ggg_client)
     app.state.trade_service = TradeService(trade_repository, scout_client, item_repository)
 

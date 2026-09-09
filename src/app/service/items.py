@@ -1,9 +1,11 @@
 from app.client.ggg import GGGClient
 from app.repository.items import ItemRepository
+from app.repository.stats import StatsRepository
 
 class ItemService():
-   def __init__(self, item_repository: ItemRepository, ggg_client:GGGClient):  
+   def __init__(self, item_repository: ItemRepository,stat_repository:StatsRepository, ggg_client:GGGClient):  
        self._item_repository = item_repository
+       self._stats_repository = stat_repository
        self._ggg_client = ggg_client
 
    def get_item_ids(self,fields=["*"]):
@@ -19,3 +21,7 @@ class ItemService():
 
    async def get_stats(self):
        return await self._ggg_client.get_stats()
+
+   async def post_stats(self):
+          stats = await self._ggg_client.get_stats()
+          return self._stats_repository.insert(stats)
