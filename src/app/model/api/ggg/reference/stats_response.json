@@ -1,0 +1,15 @@
+{
+  "result": [
+    {
+      "id": "pseudo",
+      "label": "Pseudo",
+      "entries": [
+        {
+          "id": "pseudo.pseudo_total_cold_resistance",
+          "text": "+#% total to Cold Resistance",
+          "type": "pseudo"
+        }
+      ]
+    }
+  ]
+}
